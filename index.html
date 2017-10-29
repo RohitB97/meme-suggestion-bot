@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OCR Sample</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+</head>
+
+<script type="text/javascript">
+    var app = angular.module("OCR",[]);
+    
+    app.controller("Ctrl",['$scope','$http',function($scope,$http){
+        
+        $scope.processText = function() {
+            var data = {'text': $scope.text};
+            $http.post("/analyze",data).then(function(res){
+                console.log(res);
+                $scope.link = res.data.link;
+            })
+            .error(function(err){console.log(err.data);});
+        };
+
+    }]);
+    
+</script>
+
+<body ng-app="OCR" ng-controller="Ctrl">
+
+<h1>Optical Character Recognition (OCR):</h1>
+Enter the URL to an image of printed text, then click the <strong>Read image</strong> button.
+<br><br>
+Text to read: <input type="text" ng-model="text"><br>
+<!-- Image Link: <input type="text" ng-model="link"> -->
+<button ng-click="processText()">Meme Suggestions</button>
+<br><br>
+<div id="wrapper" style="width:1020px; display:table;">
+    <div id="imageDiv" style="width:420px; display:table-cell;">
+        Suggested Meme:
+        <br><br>
+        <img ng-src="link" id="sourceImage" width="400" />
+    </div>
+</div>
+</body>
+</html>
